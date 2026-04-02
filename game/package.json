@@ -1,0 +1,19 @@
+{
+  "name": "pokemon-text-game",
+  "version": "1.0.0",
+  "description": "宝可梦文字冒险游戏",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "ts-node src/main.ts"
+  },
+  "keywords": ["pokemon", "text-game", "rpg"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.0"
+  }
+}

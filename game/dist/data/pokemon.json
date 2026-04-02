@@ -1,0 +1,195 @@
+[
+    {
+        "id": 1,
+        "name": "小火龙",
+        "types": ["火"],
+        "baseStats": { "hp": 39, "attack": 52, "defense": 43, "spAttack": 60, "spDefense": 50, "speed": 65 },
+        "learnset": [1, 5, 10, 52, 53],
+        "evolution": { "level": 16, "evolvesTo": 2 },
+        "catchRate": 45,
+        "expYield": 62
+    },
+    {
+        "id": 2,
+        "name": "火恐龙",
+        "types": ["火"],
+        "baseStats": { "hp": 58, "attack": 64, "defense": 58, "spAttack": 80, "spDefense": 65, "speed": 80 },
+        "learnset": [1, 5, 10, 52, 53, 54],
+        "evolution": { "level": 36, "evolvesTo": 3 },
+        "catchRate": 45,
+        "expYield": 142
+    },
+    {
+        "id": 3,
+        "name": "喷火龙",
+        "types": ["火", "飞行"],
+        "baseStats": { "hp": 78, "attack": 84, "defense": 78, "spAttack": 109, "spDefense": 85, "speed": 100 },
+        "learnset": [1, 5, 10, 52, 53, 54, 55],
+        "catchRate": 45,
+        "expYield": 240
+    },
+    {
+        "id": 4,
+        "name": "杰尼龟",
+        "types": ["水"],
+        "baseStats": { "hp": 44, "attack": 48, "defense": 65, "spAttack": 50, "spDefense": 64, "speed": 43 },
+        "learnset": [1, 5, 10, 56, 57],
+        "evolution": { "level": 16, "evolvesTo": 5 },
+        "catchRate": 45,
+        "expYield": 63
+    },
+    {
+        "id": 5,
+        "name": "卡咪龟",
+        "types": ["水"],
+        "baseStats": { "hp": 59, "attack": 63, "defense": 80, "spAttack": 65, "spDefense": 80, "speed": 58 },
+        "learnset": [1, 5, 10, 56, 57, 58],
+        "evolution": { "level": 36, "evolvesTo": 6 },
+        "catchRate": 45,
+        "expYield": 142
+    },
+    {
+        "id": 6,
+        "name": "水箭龟",
+        "types": ["水"],
+        "baseStats": { "hp": 79, "attack": 83, "defense": 100, "spAttack": 85, "spDefense": 105, "speed": 78 },
+        "learnset": [1, 5, 10, 56, 57, 58, 59],
+        "catchRate": 45,
+        "expYield": 239
+    },
+    {
+        "id": 7,
+        "name": "妙蛙种子",
+        "types": ["草", "毒"],
+        "baseStats": { "hp": 45, "attack": 49, "defense": 49, "spAttack": 65, "spDefense": 65, "speed": 45 },
+        "learnset": [1, 5, 10, 73, 74],
+        "evolution": { "level": 16, "evolvesTo": 8 },
+        "catchRate": 45,
+        "expYield": 64
+    },
+    {
+        "id": 8,
+        "name": "妙蛙草",
+        "types": ["草", "毒"],
+        "baseStats": { "hp": 60, "attack": 62, "defense": 63, "spAttack": 80, "spDefense": 80, "speed": 60 },
+        "learnset": [1, 5, 10, 73, 74, 75],
+        "evolution": { "level": 32, "evolvesTo": 9 },
+        "catchRate": 45,
+        "expYield": 142
+    },
+    {
+        "id": 9,
+        "name": "妙蛙花",
+        "types": ["草", "毒"],
+        "baseStats": { "hp": 80, "attack": 82, "defense": 83, "spAttack": 100, "spDefense": 100, "speed": 80 },
+        "learnset": [1, 5, 10, 73, 74, 75, 76],
+        "catchRate": 45,
+        "expYield": 236
+    },
+    {
+        "id": 10,
+        "name": "绿毛虫",
+        "types": ["虫"],
+        "baseStats": { "hp": 45, "attack": 30, "defense": 35, "spAttack": 20, "spDefense": 20, "speed": 45 },
+        "learnset": [1, 5],
+        "evolution": { "level": 7, "evolvesTo": 11 },
+        "catchRate": 255,
+        "expYield": 39
+    },
+    {
+        "id": 11,
+        "name": "铁甲蛹",
+        "types": ["虫"],
+        "baseStats": { "hp": 50, "attack": 20, "defense": 55, "spAttack": 25, "spDefense": 25, "speed": 30 },
+        "learnset": [1],
+        "evolution": { "level": 10, "evolvesTo": 12 },
+        "catchRate": 120,
+        "expYield": 72
+    },
+    {
+        "id": 12,
+        "name": "巴大蝶",
+        "types": ["虫", "飞行"],
+        "baseStats": { "hp": 60, "attack": 45, "defense": 50, "spAttack": 90, "spDefense": 80, "speed": 70 },
+        "learnset": [1, 5, 10, 77, 78],
+        "catchRate": 45,
+        "expYield": 178
+    },
+    {
+        "id": 13,
+        "name": "皮卡丘",
+        "types": ["电"],
+        "baseStats": { "hp": 35, "attack": 55, "defense": 40, "spAttack": 50, "spDefense": 50, "speed": 90 },
+        "learnset": [1, 5, 10, 84, 85, 86],
+        "evolution": { "level": 0, "evolvesTo": 14 },
+        "catchRate": 190,
+        "expYield": 112
+    },
+    {
+        "id": 14,
+        "name": "雷丘",
+        "types": ["电"],
+        "baseStats": { "hp": 60, "attack": 90, "defense": 55, "spAttack": 90, "spDefense": 80, "speed": 110 },
+        "learnset": [1, 5, 10, 84, 85, 86, 87],
+        "catchRate": 75,
+        "expYield": 218
+    },
+    {
+        "id": 15,
+        "name": "小拉达",
+        "types": ["一般"],
+        "baseStats": { "hp": 30, "attack": 56, "defense": 35, "spAttack": 25, "spDefense": 35, "speed": 72 },
+        "learnset": [1, 5, 10],
+        "evolution": { "level": 20, "evolvesTo": 16 },
+        "catchRate": 255,
+        "expYield": 51
+    },
+    {
+        "id": 16,
+        "name": "拉达",
+        "types": ["一般"],
+        "baseStats": { "hp": 55, "attack": 81, "defense": 60, "spAttack": 50, "spDefense": 70, "speed": 97 },
+        "learnset": [1, 5, 10],
+        "catchRate": 127,
+        "expYield": 145
+    },
+    {
+        "id": 17,
+        "name": "波波",
+        "types": ["一般", "飞行"],
+        "baseStats": { "hp": 40, "attack": 45, "defense": 40, "spAttack": 35, "spDefense": 35, "speed": 56 },
+        "learnset": [1, 5, 10],
+        "evolution": { "level": 18, "evolvesTo": 18 },
+        "catchRate": 255,
+        "expYield": 50
+    },
+    {
+        "id": 18,
+        "name": "比比鸟",
+        "types": ["一般", "飞行"],
+        "baseStats": { "hp": 63, "attack": 60, "defense": 55, "spAttack": 50, "spDefense": 50, "speed": 71 },
+        "learnset": [1, 5, 10],
+        "evolution": { "level": 36, "evolvesTo": 19 },
+        "catchRate": 120,
+        "expYield": 122
+    },
+    {
+        "id": 19,
+        "name": "大比鸟",
+        "types": ["一般", "飞行"],
+        "baseStats": { "hp": 83, "attack": 80, "defense": 75, "spAttack": 70, "spDefense": 70, "speed": 101 },
+        "learnset": [1, 5, 10],
+        "catchRate": 45,
+        "expYield": 216
+    },
+    {
+        "id": 20,
+        "name": "阿柏蛇",
+        "types": ["毒"],
+        "baseStats": { "hp": 35, "attack": 60, "defense": 44, "spAttack": 40, "spDefense": 54, "speed": 55 },
+        "learnset": [1, 5, 10],
+        "evolution": { "level": 22, "evolvesTo": 21 },
+        "catchRate": 255,
+        "expYield": 58
+    }
+]

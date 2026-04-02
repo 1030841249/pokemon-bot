@@ -1,0 +1,18 @@
+[
+  { "id": 1, "name": "精灵球", "type": "ball", "catchRate": 1.0, "price": 200, "description": "用来捕捉野生宝可梦的球。" },
+  { "id": 2, "name": "超级球", "type": "ball", "catchRate": 1.5, "price": 600, "description": "比精灵球更容易捕捉宝可梦。" },
+  { "id": 3, "name": "高级球", "type": "ball", "catchRate": 2.0, "price": 1200, "description": "最高级的捕捉球。" },
+  
+  { "id": 10, "name": "伤药", "type": "medicine", "healHp": 20, "price": 100, "description": "恢复宝可梦20点HP。" },
+  { "id": 11, "name": "好伤药", "type": "medicine", "healHp": 50, "price": 300, "description": "恢复宝可梦50点HP。" },
+  { "id": 12, "name": "厉害伤药", "type": "medicine", "healHp": 100, "price": 700, "description": "恢复宝可梦100点HP。" },
+  { "id": 13, "name": "全满药", "type": "medicine", "healHp": 999, "price": 1500, "description": "完全恢复宝可梦的HP。" },
+  
+  { "id": 20, "name": "解毒药", "type": "medicine", "cureStatus": "poison", "price": 100, "description": "治疗宝可梦的中毒状态。" },
+  { "id": 21, "name": "灼伤药", "type": "medicine", "cureStatus": "burn", "price": 250, "description": "治疗宝可梦的灼伤状态。" },
+  { "id": 22, "name": "解麻药", "type": "medicine", "cureStatus": "paralysis", "price": 200, "description": "治疗宝可梦的麻痹状态。" },
+  { "id": 23, "name": "解冻药", "type": "medicine", "cureStatus": "freeze", "price": 250, "description": "治疗宝可梦的冰冻状态。" },
+  { "id": 24, "name": "唤醒药", "type": "medicine", "cureStatus": "sleep", "price": 200, "description": "唤醒沉睡的宝可梦。" },
+  
+  { "id": 30, "name": "复活药", "type": "medicine", "revive": true, "healHp": 999, "price": 1000, "description": "复活濒死的宝可梦并恢复一半HP。" }
+]
