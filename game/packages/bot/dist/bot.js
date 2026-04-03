@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PokemonBot = void 0;
 const icqq_1 = require("icqq");
 const readline = __importStar(require("readline"));
+const fs = __importStar(require("fs"));
 const session_1 = require("./session");
 const pokemon_1 = require("./core/pokemon");
 class PokemonBot {
@@ -81,21 +82,30 @@ class PokemonBot {
             console.log('1. 复制下面的链接，在浏览器中打开');
             console.log('2. 完成滑块验证');
             console.log('3. 验证成功后，页面会显示一串字符（ticket）');
-            console.log('4. 将 ticket 粘贴到此处按回车');
+            console.log('4. 创建 ticket.txt 文件，将 ticket 写入文件');
+            console.log('   命令: echo "your_ticket" > ticket.txt');
             console.log('');
             console.log('验证链接：');
             console.log(event.url);
             console.log('');
-            this.rl.question('请输入 ticket: ', (ticket) => {
-                if (ticket.trim()) {
-                    console.log('正在提交验证...');
-                    this.client.submitSlider(ticket.trim());
+            console.log('等待 ticket.txt 文件...');
+            // 轮询检查 ticket.txt 文件
+            const checkInterval = setInterval(() => {
+                try {
+                    if (fs.existsSync('ticket.txt')) {
+                        const ticket = fs.readFileSync('ticket.txt', 'utf-8').trim();
+                        if (ticket) {
+                            clearInterval(checkInterval);
+                            console.log('检测到 ticket，正在提交验证...');
+                            fs.unlinkSync('ticket.txt'); // 删除文件
+                            this.client.submitSlider(ticket);
+                        }
+                    }
                 }
-                else {
-                    console.log('ticket 不能为空，请重新运行程序');
-                    process.exit(1);
+                catch (error) {
+                    console.error('读取 ticket 文件失败:', error);
                 }
-            });
+            }, 1000);
         });
         this.client.on('system.login.device', (event) => {
             console.log('');
@@ -107,14 +117,26 @@ class PokemonBot {
             console.log('');
             console.log('1. 用手机QQ扫描下方二维码');
             console.log('   或访问链接进行验证');
-            console.log('2. 验证成功后在此按回车继续');
+            console.log('2. 验证成功后创建 device.txt 文件');
+            console.log('   命令: touch device.txt');
             console.log('');
             console.log('验证链接：');
             console.log(event.url);
             console.log('');
-            this.rl.question('验证完成后按回车继续: ', () => {
-                console.log('正在继续登录...');
-            });
+            console.log('等待 device.txt 文件...');
+            // 轮询检查 device.txt 文件
+            const checkInterval = setInterval(() => {
+                try {
+                    if (fs.existsSync('device.txt')) {
+                        clearInterval(checkInterval);
+                        console.log('检测到验证完成，继续登录...');
+                        fs.unlinkSync('device.txt'); // 删除文件
+                    }
+                }
+                catch (error) {
+                    console.error('读取 device 文件失败:', error);
+                }
+            }, 1000);
         });
         this.client.on('system.login.error', (data) => {
             console.log('');
