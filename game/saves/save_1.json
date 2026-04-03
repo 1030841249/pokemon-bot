@@ -1,0 +1,102 @@
+{
+  "name": "z",
+  "party": [
+    {
+      "baseId": 1,
+      "level": 6,
+      "exp": 275,
+      "currentHp": 20,
+      "stats": {
+        "hp": 20,
+        "attack": 11,
+        "defense": 11,
+        "spAttack": 14,
+        "spDefense": 12,
+        "speed": 13
+      },
+      "moves": [
+        {
+          "moveId": 1,
+          "currentPp": 35
+        },
+        {
+          "moveId": 5,
+          "currentPp": 40
+        },
+        {
+          "moveId": 10,
+          "currentPp": 24
+        },
+        {
+          "moveId": 52,
+          "currentPp": 14
+        }
+      ],
+      "ivs": {
+        "hp": 3,
+        "attack": 10,
+        "defense": 14,
+        "spAttack": 30,
+        "spDefense": 31,
+        "speed": 18
+      },
+      "evs": {
+        "hp": 0,
+        "attack": 0,
+        "defense": 0,
+        "spAttack": 0,
+        "spDefense": 0,
+        "speed": 0
+      },
+      "nature": "calm",
+      "ability": "猛火",
+      "statusEffects": []
+    }
+  ],
+  "pc": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "inventory": [
+    {
+      "itemId": 1,
+      "quantity": 5
+    },
+    {
+      "itemId": 10,
+      "quantity": 5
+    }
+  ],
+  "badges": 0,
+  "money": 3130,
+  "currentLocation": "viridian-forest",
+  "playTime": 0
+}

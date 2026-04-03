@@ -5,9 +5,12 @@
         "types": ["火"],
         "baseStats": { "hp": 39, "attack": 52, "defense": 43, "spAttack": 60, "spDefense": 50, "speed": 65 },
         "learnset": [1, 5, 10, 52, 53],
-        "evolution": { "level": 16, "evolvesTo": 2 },
+        "evolutions": [
+            { "level": 16, "evolvesTo": 2, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 62
+        "expYield": 62,
+        "growthRate": "medium-slow"
     },
     {
         "id": 2,
@@ -15,9 +18,12 @@
         "types": ["火"],
         "baseStats": { "hp": 58, "attack": 64, "defense": 58, "spAttack": 80, "spDefense": 65, "speed": 80 },
         "learnset": [1, 5, 10, 52, 53, 54],
-        "evolution": { "level": 36, "evolvesTo": 3 },
+        "evolutions": [
+            { "level": 36, "evolvesTo": 3, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 142
+        "expYield": 142,
+        "growthRate": "medium-slow"
     },
     {
         "id": 3,
@@ -25,8 +31,10 @@
         "types": ["火", "飞行"],
         "baseStats": { "hp": 78, "attack": 84, "defense": 78, "spAttack": 109, "spDefense": 85, "speed": 100 },
         "learnset": [1, 5, 10, 52, 53, 54, 55],
+        "evolutions": [],
         "catchRate": 45,
-        "expYield": 240
+        "expYield": 240,
+        "growthRate": "medium-slow"
     },
     {
         "id": 4,
@@ -34,9 +42,12 @@
         "types": ["水"],
         "baseStats": { "hp": 44, "attack": 48, "defense": 65, "spAttack": 50, "spDefense": 64, "speed": 43 },
         "learnset": [1, 5, 10, 56, 57],
-        "evolution": { "level": 16, "evolvesTo": 5 },
+        "evolutions": [
+            { "level": 16, "evolvesTo": 5, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 63
+        "expYield": 63,
+        "growthRate": "medium-slow"
     },
     {
         "id": 5,
@@ -44,9 +55,12 @@
         "types": ["水"],
         "baseStats": { "hp": 59, "attack": 63, "defense": 80, "spAttack": 65, "spDefense": 80, "speed": 58 },
         "learnset": [1, 5, 10, 56, 57, 58],
-        "evolution": { "level": 36, "evolvesTo": 6 },
+        "evolutions": [
+            { "level": 36, "evolvesTo": 6, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 142
+        "expYield": 142,
+        "growthRate": "medium-slow"
     },
     {
         "id": 6,
@@ -54,8 +68,10 @@
         "types": ["水"],
         "baseStats": { "hp": 79, "attack": 83, "defense": 100, "spAttack": 85, "spDefense": 105, "speed": 78 },
         "learnset": [1, 5, 10, 56, 57, 58, 59],
+        "evolutions": [],
         "catchRate": 45,
-        "expYield": 239
+        "expYield": 239,
+        "growthRate": "medium-slow"
     },
     {
         "id": 7,
@@ -63,9 +79,12 @@
         "types": ["草", "毒"],
         "baseStats": { "hp": 45, "attack": 49, "defense": 49, "spAttack": 65, "spDefense": 65, "speed": 45 },
         "learnset": [1, 5, 10, 73, 74],
-        "evolution": { "level": 16, "evolvesTo": 8 },
+        "evolutions": [
+            { "level": 16, "evolvesTo": 8, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 64
+        "expYield": 64,
+        "growthRate": "medium-slow"
     },
     {
         "id": 8,
@@ -73,9 +92,12 @@
         "types": ["草", "毒"],
         "baseStats": { "hp": 60, "attack": 62, "defense": 63, "spAttack": 80, "spDefense": 80, "speed": 60 },
         "learnset": [1, 5, 10, 73, 74, 75],
-        "evolution": { "level": 32, "evolvesTo": 9 },
+        "evolutions": [
+            { "level": 32, "evolvesTo": 9, "type": "level" }
+        ],
         "catchRate": 45,
-        "expYield": 142
+        "expYield": 142,
+        "growthRate": "medium-slow"
     },
     {
         "id": 9,
@@ -83,8 +105,10 @@
         "types": ["草", "毒"],
         "baseStats": { "hp": 80, "attack": 82, "defense": 83, "spAttack": 100, "spDefense": 100, "speed": 80 },
         "learnset": [1, 5, 10, 73, 74, 75, 76],
+        "evolutions": [],
         "catchRate": 45,
-        "expYield": 236
+        "expYield": 236,
+        "growthRate": "medium-slow"
     },
     {
         "id": 10,
@@ -92,9 +116,12 @@
         "types": ["虫"],
         "baseStats": { "hp": 45, "attack": 30, "defense": 35, "spAttack": 20, "spDefense": 20, "speed": 45 },
         "learnset": [1, 5],
-        "evolution": { "level": 7, "evolvesTo": 11 },
+        "evolutions": [
+            { "level": 7, "evolvesTo": 11, "type": "level" }
+        ],
         "catchRate": 255,
-        "expYield": 39
+        "expYield": 39,
+        "growthRate": "medium-fast"
     },
     {
         "id": 11,
@@ -102,9 +129,12 @@
         "types": ["虫"],
         "baseStats": { "hp": 50, "attack": 20, "defense": 55, "spAttack": 25, "spDefense": 25, "speed": 30 },
         "learnset": [1],
-        "evolution": { "level": 10, "evolvesTo": 12 },
+        "evolutions": [
+            { "level": 10, "evolvesTo": 12, "type": "level" }
+        ],
         "catchRate": 120,
-        "expYield": 72
+        "expYield": 72,
+        "growthRate": "medium-fast"
     },
     {
         "id": 12,
@@ -112,8 +142,10 @@
         "types": ["虫", "飞行"],
         "baseStats": { "hp": 60, "attack": 45, "defense": 50, "spAttack": 90, "spDefense": 80, "speed": 70 },
         "learnset": [1, 5, 10, 77, 78],
+        "evolutions": [],
         "catchRate": 45,
-        "expYield": 178
+        "expYield": 178,
+        "growthRate": "medium-fast"
     },
     {
         "id": 13,
@@ -121,9 +153,12 @@
         "types": ["电"],
         "baseStats": { "hp": 35, "attack": 55, "defense": 40, "spAttack": 50, "spDefense": 50, "speed": 90 },
         "learnset": [1, 5, 10, 84, 85, 86],
-        "evolution": { "level": 0, "evolvesTo": 14 },
+        "evolutions": [
+            { "item": 100, "evolvesTo": 14, "type": "item", "itemName": "雷之石" }
+        ],
         "catchRate": 190,
-        "expYield": 112
+        "expYield": 112,
+        "growthRate": "medium-fast"
     },
     {
         "id": 14,
@@ -131,8 +166,10 @@
         "types": ["电"],
         "baseStats": { "hp": 60, "attack": 90, "defense": 55, "spAttack": 90, "spDefense": 80, "speed": 110 },
         "learnset": [1, 5, 10, 84, 85, 86, 87],
+        "evolutions": [],
         "catchRate": 75,
-        "expYield": 218
+        "expYield": 218,
+        "growthRate": "medium-fast"
     },
     {
         "id": 15,
@@ -140,9 +177,12 @@
         "types": ["一般"],
         "baseStats": { "hp": 30, "attack": 56, "defense": 35, "spAttack": 25, "spDefense": 35, "speed": 72 },
         "learnset": [1, 5, 10],
-        "evolution": { "level": 20, "evolvesTo": 16 },
+        "evolutions": [
+            { "level": 20, "evolvesTo": 16, "type": "level" }
+        ],
         "catchRate": 255,
-        "expYield": 51
+        "expYield": 51,
+        "growthRate": "medium-fast"
     },
     {
         "id": 16,
@@ -150,8 +190,10 @@
         "types": ["一般"],
         "baseStats": { "hp": 55, "attack": 81, "defense": 60, "spAttack": 50, "spDefense": 70, "speed": 97 },
         "learnset": [1, 5, 10],
+        "evolutions": [],
         "catchRate": 127,
-        "expYield": 145
+        "expYield": 145,
+        "growthRate": "medium-fast"
     },
     {
         "id": 17,
@@ -159,9 +201,12 @@
         "types": ["一般", "飞行"],
         "baseStats": { "hp": 40, "attack": 45, "defense": 40, "spAttack": 35, "spDefense": 35, "speed": 56 },
         "learnset": [1, 5, 10],
-        "evolution": { "level": 18, "evolvesTo": 18 },
+        "evolutions": [
+            { "level": 18, "evolvesTo": 18, "type": "level" }
+        ],
         "catchRate": 255,
-        "expYield": 50
+        "expYield": 50,
+        "growthRate": "medium-slow"
     },
     {
         "id": 18,
@@ -169,9 +214,12 @@
         "types": ["一般", "飞行"],
         "baseStats": { "hp": 63, "attack": 60, "defense": 55, "spAttack": 50, "spDefense": 50, "speed": 71 },
         "learnset": [1, 5, 10],
-        "evolution": { "level": 36, "evolvesTo": 19 },
+        "evolutions": [
+            { "level": 36, "evolvesTo": 19, "type": "level" }
+        ],
         "catchRate": 120,
-        "expYield": 122
+        "expYield": 122,
+        "growthRate": "medium-slow"
     },
     {
         "id": 19,
@@ -179,8 +227,10 @@
         "types": ["一般", "飞行"],
         "baseStats": { "hp": 83, "attack": 80, "defense": 75, "spAttack": 70, "spDefense": 70, "speed": 101 },
         "learnset": [1, 5, 10],
+        "evolutions": [],
         "catchRate": 45,
-        "expYield": 216
+        "expYield": 216,
+        "growthRate": "medium-slow"
     },
     {
         "id": 20,
@@ -188,8 +238,288 @@
         "types": ["毒"],
         "baseStats": { "hp": 35, "attack": 60, "defense": 44, "spAttack": 40, "spDefense": 54, "speed": 55 },
         "learnset": [1, 5, 10],
-        "evolution": { "level": 22, "evolvesTo": 21 },
+        "evolutions": [
+            { "level": 22, "evolvesTo": 21, "type": "level" }
+        ],
         "catchRate": 255,
-        "expYield": 58
+        "expYield": 58,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 21,
+        "name": "阿柏怪",
+        "types": ["毒"],
+        "baseStats": { "hp": 60, "attack": 85, "defense": 69, "spAttack": 65, "spDefense": 79, "speed": 80 },
+        "learnset": [1, 5, 10],
+        "evolutions": [],
+        "catchRate": 90,
+        "expYield": 157,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 22,
+        "name": "独角虫",
+        "types": ["虫", "毒"],
+        "baseStats": { "hp": 40, "attack": 35, "defense": 30, "spAttack": 20, "spDefense": 20, "speed": 50 },
+        "learnset": [1, 5],
+        "evolutions": [
+            { "level": 7, "evolvesTo": 23, "type": "level" }
+        ],
+        "catchRate": 255,
+        "expYield": 39,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 23,
+        "name": "铁壳蛹",
+        "types": ["虫", "毒"],
+        "baseStats": { "hp": 50, "attack": 25, "defense": 25, "spAttack": 25, "spDefense": 25, "speed": 35 },
+        "learnset": [1],
+        "evolutions": [
+            { "level": 10, "evolvesTo": 24, "type": "level" }
+        ],
+        "catchRate": 120,
+        "expYield": 72,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 24,
+        "name": "大针蜂",
+        "types": ["虫", "毒"],
+        "baseStats": { "hp": 65, "attack": 80, "defense": 40, "spAttack": 45, "spDefense": 80, "speed": 95 },
+        "learnset": [1, 5, 10, 79, 80],
+        "evolutions": [],
+        "catchRate": 45,
+        "expYield": 175,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 25,
+        "name": "尼多朗",
+        "types": ["毒"],
+        "baseStats": { "hp": 46, "attack": 57, "defense": 40, "spAttack": 40, "spDefense": 40, "speed": 50 },
+        "learnset": [1, 5, 81],
+        "evolutions": [
+            { "level": 16, "evolvesTo": 26, "type": "level" }
+        ],
+        "catchRate": 235,
+        "expYield": 60,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 26,
+        "name": "尼多力诺",
+        "types": ["毒"],
+        "baseStats": { "hp": 61, "attack": 72, "defense": 57, "spAttack": 55, "spDefense": 55, "speed": 65 },
+        "learnset": [1, 5, 81, 82],
+        "evolutions": [
+            { "item": 101, "evolvesTo": 27, "type": "item", "itemName": "月亮石" }
+        ],
+        "catchRate": 120,
+        "expYield": 119,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 27,
+        "name": "尼多王",
+        "types": ["毒", "地面"],
+        "baseStats": { "hp": 91, "attack": 102, "defense": 77, "spAttack": 85, "spDefense": 75, "speed": 85 },
+        "learnset": [1, 5, 81, 82, 83],
+        "evolutions": [],
+        "catchRate": 45,
+        "expYield": 227,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 29,
+        "name": "尼多兰",
+        "types": ["毒"],
+        "baseStats": { "hp": 55, "attack": 47, "defense": 52, "spAttack": 40, "spDefense": 65, "speed": 41 },
+        "learnset": [1, 5, 73],
+        "evolutions": [
+            { "level": 16, "evolvesTo": 28, "type": "level" }
+        ],
+        "catchRate": 235,
+        "expYield": 59,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 28,
+        "name": "尼多娜",
+        "types": ["毒"],
+        "baseStats": { "hp": 70, "attack": 62, " defense": 67, "spAttack": 55, "spDefense": 75, "speed": 60 },
+        "learnset": [1, 5, 73, 74],
+        "evolutions": [
+            { "item": 101, "evolvesTo": 30, "type": "item", "itemName": "月亮石" }
+        ],
+        "catchRate": 120,
+        "expYield": 118,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 30,
+        "name": "尼多后",
+        "types": ["毒", "地面"],
+        "baseStats": { "hp": 90, "attack": 82, "defense": 87, "spAttack": 81, "spDefense": 85, "speed": 76 },
+        "learnset": [1, 5, 73, 74, 75],
+        "evolutions": [],
+        "catchRate": 45,
+        "expYield": 223,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 31,
+        "name": "走路草",
+        "types": ["草", "妖精"],
+        "baseStats": { "hp": 45, "attack": 50, "defense": 55, "spAttack": 75, "spDefense": 65, "speed": 30 },
+        "learnset": [1, 5, 73, 74],
+        "evolutions": [
+            { "level": 21, "evolvesTo": 32, "type": "level" }
+        ],
+        "catchRate": 255,
+        "expYield": 66,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 32,
+        "name": "\u81ed\u81ed\u82b1",
+        "types": ["草", "毒"],
+        "baseStats": { "hp": 60, "attack": 65, "defense": 70, "spAttack": 85, "spDefense": 75, "speed": 40 },
+        "learnset": [1, 5, 73, 74, 88],
+        "evolutions": [
+            { "item": 101, "evolvesTo": 33, "type": "item", "itemName": "叶子石" }
+        ],
+        "catchRate": 150,
+        "expYield": 138,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 33,
+        "name": "霸王花",
+        "types": ["草", "毒"],
+        "baseStats": { "hp": 80, "attack": 105, "defense": 70, "spAttack": 100, "spDefense": 85, "speed": 70 },
+        "learnset": [1, 5, 73, 74, 76, 89],
+        "evolutions": [],
+        "catchRate": 45,
+        "expYield": 221,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 34,
+        "name": "超音蝠",
+        "types": ["毒", "飞行"],
+        "baseStats": { "hp": 40, "attack": 45, "defense": 35, "spAttack": 30, "spDefense": 40, "speed": 55 },
+        "learnset": [1, 5, 84],
+        "evolutions": [
+            { "level": 22, "evolvesTo": 35, "type": "level" }
+        ],
+        "catchRate": 255,
+        "expYield": 49,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 35,
+        "name": "大嘴蝠",
+        "types": ["毒", "飞行"],
+        "baseStats": { "hp": 75, "attack": 80, "defense": 55, "spAttack": 70, "spDefense": 75, "speed": 90 },
+        "learnset": [1, 5, 84, 85, 86],
+        "evolutions": [],
+        "catchRate": 90,
+        "expYield": 171,
+        "growthRate": "medium-fast"
+    },
+    {
+        "id": 37,
+        "name": "猴怪",
+        "types": "格斗",
+        "baseStats": { "hp": 40, "attack": 80, "defense": 35, "spAttack": 35, "spDefense": 45, "speed": 70 },
+        "learnset": [1, 5, 90, 91],
+        "evolutions": [
+            { "level": 28, "evolvesTo": 38, "type": "level" }
+        ],
+        "catchRate": 190,
+        "expYield": 61,
+        "growthRate": "medium"
+    },
+    {
+        "id": 38,
+        "name": "火暴猴",
+        "types": "格斗",
+        "baseStats": { "hp": 65, "attack": 105, "defense": 60, "spAttack": 60, "spDefense": 70, "speed": 95 },
+        "learnset": [1, 5, 90, 91, 92],
+        "evolutions": [],
+        "catchRate": 75,
+        "expYield": 174,
+        "growthRate": "medium"
+    },
+    {
+        "id": 41,
+        "name": "蚊香蝌蚪",
+        "types": ["水"],
+        "baseStats": { "hp": 50, "attack": 48, "defense": 50, "spAttack": 50, "spDefense": 50, "speed": 50 },
+        "learnset": [1, 5, 56, 93],
+        "evolutions": [
+            { "level": 25, "evolvesTo": 42, "type": "level" }
+        ],
+        "catchRate": 255,
+        "expYield": 58,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 42,
+        "name": "蚊香君",
+        "types": ["水"],
+        "baseStats": { "hp": 65, "attack": 65, "defense": 65, "spAttack": 90, "spDefense": 65, "speed": 90 },
+        "learnset": [1, 5, 56, 57, 93],
+        "evolutions": [
+            { "item": 102, "evolvesTo": 43, "type": "item", "itemName": "水之石" }
+        ],
+        "catchRate": 120,
+        "expYield": 143,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 43,
+        "name": "蚊香泳士",
+        "types": ["水"],
+        "baseStats": { "hp": 90, "attack": 95, "defense": 95, "spAttack": 70, "spDefense": 90, "speed": 70 },
+        "learnset": [1, 5, 56, 57, 59],
+        "evolutions": [],
+        "catchRate": 45,
+        "expYield": 203,
+        "growthRate": "medium-slow"
+    },
+    {
+        "id": 46,
+        "name": "帕路奇亚",
+        "types": ["幽灵", "龙"],
+        "baseStats": { "hp": 90, "attack": 120, "defense": 100, "spAttack": 150, "spDefense": 120, "speed": 100 },
+        "learnset": [1, 94, 95, 96, 97],
+        "evolutions": [],
+        "catchRate": 3,
+        "expYield": 340,
+        "growthRate": "slow"
+    },
+    {
+        "id": 47,
+        "name": "迪亚鲁卡",
+        "types": ["钢", "龙"],
+        "baseStats": { "hp": 100, "attack": 135, "defense": 120, "spAttack": 120, "spDefense": 125, "speed": 90 },
+        "learnset": [1, 98, 99, 100, 101],
+        "evolutions": [],
+        "catchRate": 3,
+        "expYield": 360,
+        "growthRate": "slow"
+    },
+    {
+        "id": 48,
+        "name": "梦幻",
+        "types": ["超能"],
+        "baseStats": { "hp": 100, "attack": 100, "defense": 100, "spAttack": 100, "spDefense": 100, "speed": 100 },
+        "learnset": [1, 102, 103, 104, 105],
+        "evolutions": [],
+        "catchRate": 3,
+        "expYield": 270,
+        "growthRate": "medium-slow"
     }
 ]

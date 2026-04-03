@@ -1,7 +1,12 @@
-import { BattleState, BattleAction, PokemonInstance } from './types';
+import { BattleState, PokemonInstance, BattleAction } from './types';
 export declare class BattleEngine {
-    static createBattle(playerPokemon: PokemonInstance, enemyPokemon: PokemonInstance, type?: 'wild' | 'trainer'): BattleState;
-    static executeTurn(state: BattleState, playerAction: BattleAction, enemyAction: BattleAction): BattleState;
+    static createBattle(playerPokemon: PokemonInstance, enemyPokemon: PokemonInstance, type: 'wild' | 'trainer'): BattleState;
+    static executeTurn(state: BattleState, playerAction: BattleAction, enemyAction: BattleAction): {
+        messages: string[];
+        isOver: boolean;
+    };
+    private static processStatusEffects;
+    private static canPokemonAct;
     private static executeAction;
     private static executeAttack;
     private static calculateDamage;
@@ -9,7 +14,6 @@ export declare class BattleEngine {
     private static getStabBonus;
     private static executeRun;
     private static checkBattleEnd;
-    private static addLog;
     static getEnemyAction(state: BattleState): BattleAction;
     static getExpReward(state: BattleState): number;
     static canCatch(state: BattleState, ballCatchRate: number): {

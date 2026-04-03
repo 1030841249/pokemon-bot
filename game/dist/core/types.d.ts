@@ -1,4 +1,15 @@
 export type PokemonType = '火' | '水' | '草' | '电' | '冰' | '格斗' | '毒' | '地面' | '飞行' | '超能' | '虫' | '岩石' | '幽灵' | '龙' | '恶' | '钢' | '妖精' | '一般';
+export interface Nature {
+    name: string;
+    plus: string;
+    minus: string;
+    mod: number;
+}
+export interface Ability {
+    name: string;
+    description: string;
+    effect: string;
+}
 export interface Stats {
     hp: number;
     attack: number;
@@ -17,18 +28,24 @@ export interface Move {
     pp: number;
     description: string;
 }
+export interface Evolution {
+    level?: number;
+    evolvesTo: number;
+    type: 'level' | 'item' | 'trade' | 'friendship';
+    itemName?: string;
+}
 export interface PokemonBase {
     id: number;
     name: string;
     types: PokemonType[];
     baseStats: Stats;
     learnset: number[];
-    evolution?: {
-        level: number;
-        evolvesTo: number;
-    };
+    evolutions?: Evolution[];
     catchRate: number;
     expYield: number;
+    growthRate?: string;
+    abilities?: string | string[];
+    tier?: number;
 }
 export interface PokemonInstance {
     baseId: number;
@@ -40,6 +57,9 @@ export interface PokemonInstance {
     moves: LearnedMove[];
     ivs: Stats;
     evs: Stats;
+    nature: string;
+    ability: string;
+    statusEffects: string[];
 }
 export interface LearnedMove {
     moveId: number;
@@ -65,7 +85,12 @@ export interface Location {
     description: string;
     connections: string[];
     wildPokemon: WildEncounter[];
+    minTier?: number;
+    maxTier?: number;
     npcs: NPC[];
+    hasCenter: boolean;
+    hasShop: boolean;
+    shopItems?: number[];
     gym?: GymLeader;
 }
 export interface WildEncounter {

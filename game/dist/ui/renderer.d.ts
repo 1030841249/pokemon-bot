@@ -6,9 +6,11 @@ export declare class Renderer {
     static drawBox(title: string, content: string[]): void;
     private static formatLine;
     private static getDisplayWidth;
+    private static truncateText;
     static drawMenu(title: string, options: string[]): void;
     static drawBattle(state: BattleState): void;
-    static drawBattleMenu(pokemon: PokemonInstance): void;
+    private static getStatusEffectText;
+    static drawBattleMenu(): void;
     static drawMoveMenu(pokemon: PokemonInstance): void;
     static drawPokemonStatus(pokemon: PokemonInstance): void;
     static drawParty(pokemons: PokemonInstance[]): void;
@@ -22,5 +24,6 @@ export declare class Renderer {
     static drawLocation(name: string, description: string): void;
     static drawWildBattleStart(pokemon: PokemonInstance): void;
     static drawCatchAttempt(shakes: number, success: boolean): void;
+    static showContinuePrompt(): void;
 }
 //# sourceMappingURL=renderer.d.ts.map

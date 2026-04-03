@@ -8,7 +8,7 @@ const pokemon_1 = require("./pokemon");
 const moves_json_1 = __importDefault(require("../data/moves.json"));
 const typeChart_json_1 = __importDefault(require("../data/typeChart.json"));
 class BattleEngine {
-    static createBattle(playerPokemon, enemyPokemon, type = 'wild') {
+    static createBattle(playerPokemon, enemyPokemon, type) {
         return {
             type,
             playerPokemon: { ...playerPokemon },
@@ -22,59 +22,132 @@ class BattleEngine {
     }
     static executeTurn(state, playerAction, enemyAction) {
         state.turn++;
+        const turnMessages = [];
+        const statusMsgs = this.processStatusEffects(state, state.playerPokemon, 'player');
+        turnMessages.push(...statusMsgs);
+        if (this.checkBattleEnd(state)) {
+            return { messages: turnMessages, isOver: state.isOver };
+        }
+        const enemyStatusMsgs = this.processStatusEffects(state, state.enemyPokemon, 'enemy');
+        turnMessages.push(...enemyStatusMsgs);
+        if (this.checkBattleEnd(state)) {
+            return { messages: turnMessages, isOver: state.isOver };
+        }
         const playerSpeed = state.playerPokemon.stats.speed;
         const enemySpeed = state.enemyPokemon.stats.speed;
+        const playerCanAct = this.canPokemonAct(state.playerPokemon);
+        const enemyCanAct = this.canPokemonAct(state.enemyPokemon);
         const playerFirst = playerSpeed > enemySpeed ||
             (playerSpeed === enemySpeed && Math.random() < 0.5);
         if (playerFirst) {
-            this.executeAction(state, state.playerPokemon, state.enemyPokemon, playerAction, 'player');
-            if (!this.checkBattleEnd(state)) {
-                this.executeAction(state, state.enemyPokemon, state.playerPokemon, enemyAction, 'enemy');
+            if (playerCanAct) {
+                const msg1 = this.executeAction(state, state.playerPokemon, state.enemyPokemon, playerAction, 'player');
+                turnMessages.push(...msg1);
+            }
+            else {
+                turnMessages.push(`${pokemon_1.PokemonManager.getPokemonName(state.playerPokemon)}无法行动！`);
+            }
+            if (!this.checkBattleEnd(state) && enemyCanAct) {
+                const msg2 = this.executeAction(state, state.enemyPokemon, state.playerPokemon, enemyAction, 'enemy');
+                turnMessages.push(...msg2);
             }
         }
         else {
-            this.executeAction(state, state.enemyPokemon, state.playerPokemon, enemyAction, 'enemy');
-            if (!this.checkBattleEnd(state)) {
-                this.executeAction(state, state.playerPokemon, state.enemyPokemon, playerAction, 'player');
+            if (enemyCanAct) {
+                const msg1 = this.executeAction(state, state.enemyPokemon, state.playerPokemon, enemyAction, 'enemy');
+                turnMessages.push(...msg1);
+            }
+            if (!this.checkBattleEnd(state) && playerCanAct) {
+                const msg2 = this.executeAction(state, state.playerPokemon, state.enemyPokemon, playerAction, 'player');
+                turnMessages.push(...msg2);
             }
         }
         this.checkBattleEnd(state);
-        return state;
+        return { messages: turnMessages, isOver: state.isOver };
     }
-    static executeAction(state, attacker, defender, action, attackerRole) {
+    static processStatusEffects(state, pokemon, _role) {
+        const messages = [];
+        const name = pokemon_1.PokemonManager.getPokemonName(pokemon);
+        for (const status of pokemon.statusEffects) {
+            const effectInfo = pokemon_1.PokemonManager.getStatusEffectiveness(status);
+            if (effectInfo.damagePerTurn > 0 && pokemon.currentHp > 0) {
+                const damage = Math.floor(pokemon.stats.hp * effectInfo.damagePerTurn / 100);
+                pokemon.currentHp = Math.max(0, pokemon.currentHp - damage);
+                let statusName = '';
+                switch (status) {
+                    case 'poison':
+                        statusName = '毒';
+                        break;
+                    case 'burn':
+                        statusName = '烧伤';
+                        break;
+                    case 'curse':
+                        statusName = '诅咒';
+                        break;
+                }
+                messages.push(`${name}受到${statusName}伤害，损失 ${damage} HP！`);
+            }
+            if (status === 'sleep') {
+                if (Math.random() < 0.33) {
+                    pokemon.statusEffects = pokemon.statusEffects.filter(s => s !== 'sleep');
+                    messages.push(`${name}从睡眠中醒来了！`);
+                }
+            }
+            if (status === 'freeze') {
+                if (Math.random() < 0.2) {
+                    pokemon.statusEffects = pokemon.statusEffects.filter(s => s !== 'freeze');
+                    messages.push(`${name}解冻了！`);
+                }
+            }
+        }
+        return messages;
+    }
+    static canPokemonAct(pokemon) {
+        for (const status of pokemon.statusEffects) {
+            const effectInfo = pokemon_1.PokemonManager.getStatusEffectiveness(status);
+            if (!effectInfo.canAttack)
+                return false;
+        }
+        return true;
+    }
+    static executeAction(state, attacker, defender, action, _attackerRole) {
+        const messages = [];
         switch (action.type) {
             case 'attack':
-                this.executeAttack(state, attacker, defender, action.moveId, attackerRole);
+                const attackMsgs = this.executeAttack(state, attacker, defender, action.moveId);
+                messages.push(...attackMsgs);
                 break;
             case 'run':
-                this.executeRun(state, attackerRole);
+                const runMsg = this.executeRun(state);
+                messages.push(runMsg);
                 break;
             case 'wait':
-                this.addLog(state, `${pokemon_1.PokemonManager.getPokemonName(attacker)}在等待...`, 'info');
+                messages.push(`${pokemon_1.PokemonManager.getPokemonName(attacker)}在等待...`);
                 break;
         }
+        return messages;
     }
-    static executeAttack(state, attacker, defender, moveId, attackerRole) {
+    static executeAttack(state, attacker, defender, moveId) {
+        const messages = [];
         const move = moves_json_1.default.find(m => m.id === moveId);
         if (!move) {
-            this.addLog(state, '技能不存在！', 'info');
-            return;
+            messages.push('技能不存在！');
+            return messages;
         }
         const learnedMove = attacker.moves.find(m => m.moveId === moveId);
         if (!learnedMove || learnedMove.currentPp <= 0) {
-            this.addLog(state, '没有PP了！', 'info');
-            return;
+            messages.push('没有PP了！');
+            return messages;
         }
         learnedMove.currentPp--;
         const attackerName = pokemon_1.PokemonManager.getPokemonName(attacker);
-        const defenderName = pokemon_1.PokemonManager.getPokemonName(defender);
         if (Math.random() * 100 > move.accuracy) {
-            this.addLog(state, `${attackerName}使用了${move.name}！但是没打中...`, 'miss');
-            return;
+            messages.push(`${attackerName}使用了${move.name}！没打中...`);
+            return messages;
         }
         if (move.category === 'status') {
-            this.addLog(state, `${attackerName}使用了${move.name}！`, 'info');
-            return;
+            messages.push(`${attackerName}使用了${move.name}！`);
+            return messages;
         }
         const damage = this.calculateDamage(attacker, defender, move);
         defender.currentHp = Math.max(0, defender.currentHp - damage);
@@ -87,11 +160,14 @@ class BattleEngine {
         else if (effectiveness === 0)
             effectivenessText = '没有效果...';
         const isCritical = Math.random() < 0.0625;
-        const actualDamage = isCritical ? Math.floor(damage * 1.5) : damage;
-        this.addLog(state, `${attackerName}使用了${move.name}！${effectivenessText}造成了${actualDamage}点伤害！`, isCritical ? 'critical' : 'damage');
-        if (isCritical) {
-            this.addLog(state, '击中了要害！', 'critical');
-        }
+        let msg = `${attackerName}的 ${move.name}！`;
+        if (effectivenessText)
+            msg += effectivenessText;
+        msg += `造成 ${damage} 点伤害`;
+        if (isCritical)
+            msg += ' [要害一击]';
+        messages.push(msg);
+        return messages;
     }
     static calculateDamage(attacker, defender, move) {
         const level = attacker.level;
@@ -127,41 +203,28 @@ class BattleEngine {
             return 1;
         return attackerBase.types.includes(moveType) ? 1.5 : 1;
     }
-    static executeRun(state, runner) {
+    static executeRun(state) {
         if (state.type === 'wild') {
             if (Math.random() < 0.5) {
                 state.isOver = true;
-                this.addLog(state, '成功逃跑了！', 'info');
+                return '成功逃跑了！';
             }
-            else {
-                this.addLog(state, '逃跑失败！', 'info');
-            }
+            return '逃跑失败！';
         }
-        else {
-            this.addLog(state, '训练家战斗中无法逃跑！', 'info');
-        }
+        return '训练家战斗中无法逃跑！';
     }
     static checkBattleEnd(state) {
-        if (pokemon_1.PokemonManager.isFainted(state.playerPokemon)) {
-            state.isOver = true;
-            state.winner = 'enemy';
-            this.addLog(state, `${pokemon_1.PokemonManager.getPokemonName(state.playerPokemon)}倒下了！`, 'info');
-            return true;
-        }
-        if (pokemon_1.PokemonManager.isFainted(state.enemyPokemon)) {
+        if (state.enemyPokemon.currentHp <= 0) {
             state.isOver = true;
             state.winner = 'player';
-            this.addLog(state, `${pokemon_1.PokemonManager.getPokemonName(state.enemyPokemon)}被击败了！`, 'info');
+            return true;
+        }
+        if (state.playerPokemon.currentHp <= 0) {
+            state.isOver = true;
+            state.winner = 'enemy';
             return true;
         }
         return false;
-    }
-    static addLog(state, message, type) {
-        state.log.push({
-            turn: state.turn,
-            message,
-            type
-        });
     }
     static getEnemyAction(state) {
         const enemy = state.enemyPokemon;
