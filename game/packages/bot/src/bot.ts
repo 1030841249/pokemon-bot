@@ -28,7 +28,7 @@ class PokemonBot {
     };
     
     this.client = new Client({ 
-      platform: 1,
+      platform: 3,  // 使用 Watch 协议 (3) 支持扫码登录
       log_level: 'info'
     });
     
@@ -82,9 +82,16 @@ class PokemonBot {
             const ticket = fs.readFileSync('ticket.txt', 'utf-8').trim();
             if (ticket) {
               clearInterval(checkInterval);
-              console.log('检测到 ticket，正在提交验证...');
+              console.log('检测到 ticket:', ticket.substring(0, 20) + '...');
+              console.log('正在提交验证...');
               fs.unlinkSync('ticket.txt'); // 删除文件
-              this.client.submitSlider(ticket);
+              
+              try {
+                this.client.submitSlider(ticket);
+                console.log('ticket 已提交，等待服务器响应...');
+              } catch (err) {
+                console.error('提交 ticket 失败:', err);
+              }
             }
           }
         } catch (error) {
@@ -140,6 +147,85 @@ class PokemonBot {
       console.log('4. 滑块验证ticket错误或过期');
       console.log('');
       process.exit(1);
+    });
+
+    // 监听登录相关事件
+    this.client.on('internal.verbose', (verbose: any) => {
+      console.log('[icqq]', verbose);
+    });
+
+    // 二维码处理
+    let qrcodeCheckInterval: NodeJS.Timeout | null = null;
+    
+    this.client.on('system.login.qrcode', (event: { image: Buffer }) => {
+      console.log('');
+      console.log('==========================================');
+      console.log('        需要扫描二维码登录');
+      console.log('==========================================');
+      console.log('');
+      console.log('请按以下步骤操作：');
+      console.log('');
+      console.log('1. 保存二维码图片到本地');
+      console.log('2. 使用手机QQ扫描二维码');
+      console.log('3. 在手机上确认登录');
+      console.log('4. 创建 qrcode.txt 文件通知机器人');
+      console.log('   命令: touch qrcode.txt');
+      console.log('');
+      console.log('⚠️  二维码有效期约2分钟，过期会自动刷新');
+      console.log('');
+      
+      // 保存二维码图片
+      const qrcodePath = './qrcode.png';
+      fs.writeFileSync(qrcodePath, event.image);
+      console.log(`二维码已保存到: ${qrcodePath}`);
+      console.log('请立即下载并用手机QQ扫描！');
+      console.log('');
+      console.log('等待扫码完成...');
+      
+      // 清除之前的定时器
+      if (qrcodeCheckInterval) {
+        clearInterval(qrcodeCheckInterval);
+      }
+      
+      // 轮询检查 qrcode.txt 文件
+      qrcodeCheckInterval = setInterval(() => {
+        try {
+          if (fs.existsSync('qrcode.txt')) {
+            clearInterval(qrcodeCheckInterval!);
+            qrcodeCheckInterval = null;
+            console.log('检测到扫码完成，正在登录...');
+            fs.unlinkSync('qrcode.txt');
+            if (fs.existsSync(qrcodePath)) {
+              fs.unlinkSync(qrcodePath);
+            }
+            // 调用二维码登录
+            (this.client as any).qrcodeLogin().catch((err: any) => {
+              console.error('二维码登录失败:', err);
+            });
+          }
+        } catch (error) {
+          console.error('读取 qrcode 文件失败:', error);
+        }
+      }, 1000);
+    });
+
+    // 二维码刷新事件
+    this.client.on('internal.error.qrcode', (code: number, message: string) => {
+      console.log(`二维码状态: ${code} - ${message}`);
+      if (code === 1) {
+        console.log('二维码已过期，正在获取新的二维码...');
+        // 清除旧的定时器
+        if (qrcodeCheckInterval) {
+          clearInterval(qrcodeCheckInterval);
+          qrcodeCheckInterval = null;
+        }
+        // 删除旧的二维码文件
+        try {
+          if (fs.existsSync('./qrcode.png')) {
+            fs.unlinkSync('./qrcode.png');
+          }
+        } catch (e) {}
+      }
     });
 
     this.client.on('message', (event: any) => {
@@ -248,9 +334,11 @@ class PokemonBot {
     console.log('==========================================');
     console.log('');
     console.log(`QQ号: ${this.config.qq}`);
+    console.log('登录方式: 扫码登录 (Watch协议)');
     console.log('');
     
-    await this.client.login(this.config.qq, this.config.password);
+    // 使用扫码登录，不需要密码
+    await this.client.login();
   }
 
   async stop(): Promise<void> {
