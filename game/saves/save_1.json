@@ -3,16 +3,16 @@
   "party": [
     {
       "baseId": 1,
-      "level": 6,
-      "exp": 275,
-      "currentHp": 20,
+      "level": 8,
+      "exp": 668,
+      "currentHp": 25,
       "stats": {
-        "hp": 20,
-        "attack": 11,
-        "defense": 11,
-        "spAttack": 14,
-        "spDefense": 12,
-        "speed": 13
+        "hp": 25,
+        "attack": 15,
+        "defense": 12,
+        "spAttack": 16,
+        "spDefense": 13,
+        "speed": 16
       },
       "moves": [
         {
@@ -25,20 +25,20 @@
         },
         {
           "moveId": 10,
-          "currentPp": 24
+          "currentPp": 25
         },
         {
           "moveId": 52,
-          "currentPp": 14
+          "currentPp": 7
         }
       ],
       "ivs": {
-        "hp": 3,
-        "attack": 10,
-        "defense": 14,
-        "spAttack": 30,
-        "spDefense": 31,
-        "speed": 18
+        "hp": 12,
+        "attack": 30,
+        "defense": 11,
+        "spAttack": 28,
+        "spDefense": 4,
+        "speed": 10
       },
       "evs": {
         "hp": 0,
@@ -48,8 +48,59 @@
         "spDefense": 0,
         "speed": 0
       },
-      "nature": "calm",
+      "nature": "hasty",
       "ability": "猛火",
+      "statusEffects": []
+    },
+    {
+      "baseId": 66,
+      "level": 7,
+      "exp": 412,
+      "currentHp": 24,
+      "stats": {
+        "hp": 24,
+        "attack": 15,
+        "defense": 10,
+        "spAttack": 10,
+        "spDefense": 10,
+        "speed": 13
+      },
+      "moves": [
+        {
+          "moveId": 1,
+          "currentPp": 35
+        },
+        {
+          "moveId": 199,
+          "currentPp": 25
+        },
+        {
+          "moveId": 200,
+          "currentPp": 20
+        },
+        {
+          "moveId": 201,
+          "currentPp": 20
+        }
+      ],
+      "ivs": {
+        "hp": 31,
+        "attack": 13,
+        "defense": 3,
+        "spAttack": 14,
+        "spDefense": 4,
+        "speed": 25
+      },
+      "evs": {
+        "hp": 0,
+        "attack": 0,
+        "defense": 0,
+        "spAttack": 0,
+        "spDefense": 0,
+        "speed": 0
+      },
+      "nature": "timid",
+      "ability": "毅力",
       "statusEffects": []
     }
   ],
@@ -88,7 +139,7 @@
   "inventory": [
     {
       "itemId": 1,
-      "quantity": 5
+      "quantity": 7
     },
     {
       "itemId": 10,
@@ -96,7 +147,7 @@
     }
   ],
   "badges": 0,
-  "money": 3130,
+  "money": 4035,
   "currentLocation": "viridian-forest",
   "playTime": 0
 }

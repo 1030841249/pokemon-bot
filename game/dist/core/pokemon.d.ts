@@ -14,6 +14,12 @@ export declare class PokemonManager {
     static calculateStats(base: any, level: number, ivs: Stats, evs: Stats): Stats;
     static applyNatureToDisplay(stats: Stats, nature: string): Stats;
     static getLearnedMoves(base: any, level: number): LearnedMove[];
+    static getNewMovesForLevel(baseId: number, level: number): number[];
+    static tryLearnMove(pokemon: PokemonInstance, moveId: number): {
+        learned: boolean;
+        replaced: boolean;
+        message: string;
+    };
     static getExpForLevel(level: number): number;
     static getExpForNextLevel(currentLevel: number): number;
     static getExpToNextLevel(pokemon: PokemonInstance): {

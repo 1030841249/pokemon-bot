@@ -493,7 +493,7 @@ class Game {
     }
     await this.input.waitForKey();
     
-    const state = BattleEngine.createBattle(playerPokemon, enemyPokemon, 'wild');
+    const state = BattleEngine.createBattle(playerPokemon, enemyPokemon, 'wild', this.player.party);
     
     while (!state.isOver) {
       Renderer.drawBattle(state);
@@ -532,13 +532,35 @@ class Game {
           playerAction = { type: 'wait' };
           break;
         case 3:
-          console.log('你的队伍:');
+          const aliveCount = this.player.party.filter(p => !PokemonManager.isFainted(p)).length;
+          if (aliveCount <= 1) {
+            console.log('没有可切换的宝可梦！');
+            await this.input.waitForKey();
+            continue;
+          }
+          console.log('切换宝可梦:');
           for (let i = 0; i < this.player.party.length; i++) {
             const p = this.player.party[i];
-            console.log(`${i+1}. ${PokemonManager.getPokemonName(p)} HP:${p.currentHp}/${p.stats.hp} Lv.${p.level}`);
+            const fainted = PokemonManager.isFainted(p) ? '(濒死)' : '';
+            const current = p === state.playerPokemon ? ' ← 当前' : '';
+            console.log(`  [${i + 1}] ${PokemonManager.getPokemonName(p)} Lv.${p.level} HP:${p.currentHp}/${p.stats.hp}${fainted}${current}`);
           }
-          await this.input.waitForKey();
-          continue;
+          console.log('  [0] 取消');
+          const switchChoice = await this.input.getMenuChoice(this.player.party.length);
+          if (switchChoice === 0) continue;
+          const switchTarget = this.player.party[switchChoice - 1];
+          if (switchTarget === state.playerPokemon) {
+            console.log('已经在场上了！');
+            await this.input.waitForKey();
+            continue;
+          }
+          if (PokemonManager.isFainted(switchTarget)) {
+            console.log('这只宝可梦已经濒死了！');
+            await this.input.waitForKey();
+            continue;
+          }
+          playerAction = { type: 'switch', pokemonIndex: switchChoice - 1 };
+          break;
         case 4:
           playerAction = { type: 'run' };
           break;
@@ -553,6 +575,36 @@ class Game {
         console.log(msg);
       }
       
+      if (state.playerPokemon.currentHp <= 0 && BattleEngine.hasAlivePartyMember(state)) {
+        console.log(`${PokemonManager.getPokemonName(state.playerPokemon)} 倒下了...`);
+        console.log('');
+        console.log('选择下一只宝可梦:');
+        const aliveParty = this.player.party.filter(p => !PokemonManager.isFainted(p));
+        for (let i = 0; i < aliveParty.length; i++) {
+          const p = aliveParty[i];
+          console.log(`  [${i + 1}] ${PokemonManager.getPokemonName(p)} Lv.${p.level} HP:${p.currentHp}/${p.stats.hp}`);
+        }
+        console.log('  [0] 逃跑');
+        console.log('');
+        
+        const switchChoice = await this.input.getMenuChoice(aliveParty.length);
+        if (switchChoice === 0) {
+          state.isOver = true;
+          state.winner = 'enemy';
+          console.log('你逃跑了...');
+          await this.input.waitForKey();
+          break;
+        }
+        
+        const newPokemon = aliveParty[switchChoice - 1];
+        const oldName = PokemonManager.getPokemonName(state.playerPokemon);
+        const newName = PokemonManager.getPokemonName(newPokemon);
+        state.playerPokemon = newPokemon;
+        console.log(`去吧！${newName}！`);
+        await this.input.waitForKey();
+        continue;
+      }
+      
       if (result.isOver && state.winner === 'player') {
         console.log(`${PokemonManager.getPokemonName(state.enemyPokemon)} 被击败了！`);
       } else if (result.isOver && state.winner === 'enemy') {
@@ -563,13 +615,16 @@ class Game {
     }
     
     if (state.winner === 'player') {
+      const aliveParty = this.player.party.filter(p => !PokemonManager.isFainted(p));
       const exp = BattleEngine.getExpReward(state);
       
       console.log(`战斗胜利！获得 ${exp} 经验值`);
       
-      const gainResult = PokemonManager.gainExp(state.playerPokemon, exp);
-      for (const msg of gainResult.messages) {
-        console.log(msg);
+      for (const p of aliveParty) {
+        const gainResult = PokemonManager.gainExp(p, Math.floor(exp / aliveParty.length));
+        for (const msg of gainResult.messages) {
+          console.log(msg);
+        }
       }
       
       const moneyReward = Math.floor(Math.random() * 100) + 20;
@@ -592,7 +647,7 @@ class Game {
     const playerPokemon = PlayerManager.getFirstHealthyPokemon(this.player);
     if (!playerPokemon) return;
 
-    const state = BattleEngine.createBattle(playerPokemon, enemyPokemon, 'trainer');
+    const state = BattleEngine.createBattle(playerPokemon, enemyPokemon, 'trainer', this.player.party);
     
     while (!state.isOver) {
       Renderer.drawBattle(state);
@@ -610,6 +665,35 @@ class Game {
           playerAction = { type: 'attack', moveId: state.playerPokemon.moves[moveChoice - 1].moveId };
           break;
         case 2:
+          const aliveCount = this.player.party.filter(p => !PokemonManager.isFainted(p)).length;
+          if (aliveCount <= 1) {
+            console.log('没有可切换的宝可梦！');
+            await this.input.waitForKey();
+            continue;
+          }
+          console.log('切换宝可梦:');
+          for (let i = 0; i < this.player.party.length; i++) {
+            const p = this.player.party[i];
+            const fainted = PokemonManager.isFainted(p) ? '(濒死)' : '';
+            const current = p === state.playerPokemon ? ' ← 当前' : '';
+            console.log(`  [${i + 1}] ${PokemonManager.getPokemonName(p)} Lv.${p.level} HP:${p.currentHp}/${p.stats.hp}${fainted}${current}`);
+          }
+          console.log('  [0] 取消');
+          const switchChoice = await this.input.getMenuChoice(this.player.party.length);
+          if (switchChoice === 0) continue;
+          const switchTarget = this.player.party[switchChoice - 1];
+          if (switchTarget === state.playerPokemon) {
+            console.log('已经在场上了！');
+            await this.input.waitForKey();
+            continue;
+          }
+          if (PokemonManager.isFainted(switchTarget)) {
+            console.log('这只宝可梦已经濒死了！');
+            await this.input.waitForKey();
+            continue;
+          }
+          playerAction = { type: 'switch', pokemonIndex: switchChoice - 1 };
+          break;
         case 3:
         case 4:
           console.log('训练家战中不能逃跑！');
@@ -626,6 +710,32 @@ class Game {
         console.log(msg);
       }
       
+      if (state.playerPokemon.currentHp <= 0 && BattleEngine.hasAlivePartyMember(state)) {
+        console.log(`${PokemonManager.getPokemonName(state.playerPokemon)} 倒下了...`);
+        console.log('');
+        console.log('选择下一只宝可梦:');
+        const aliveParty = this.player.party.filter(p => !PokemonManager.isFainted(p));
+        for (let i = 0; i < aliveParty.length; i++) {
+          const p = aliveParty[i];
+          console.log(`  [${i + 1}] ${PokemonManager.getPokemonName(p)} Lv.${p.level} HP:${p.currentHp}/${p.stats.hp}`);
+        }
+        console.log('');
+        
+        const nextChoice = await this.input.getMenuChoice(aliveParty.length);
+        if (nextChoice === 0) {
+          state.isOver = true;
+          state.winner = 'enemy';
+          break;
+        }
+        
+        const newPokemon = aliveParty[nextChoice - 1];
+        const newName = PokemonManager.getPokemonName(newPokemon);
+        state.playerPokemon = newPokemon;
+        console.log(`去吧！${newName}！`);
+        await this.input.waitForKey();
+        continue;
+      }
+      
       if (result.isOver && state.winner === 'player') {
         console.log(`击败了训练家的 ${PokemonManager.getPokemonName(state.enemyPokemon)}！`);
       }
@@ -634,12 +744,15 @@ class Game {
     }
     
     if (state.winner === 'player') {
+      const aliveParty = this.player.party.filter(p => !PokemonManager.isFainted(p));
       const exp = Math.floor(BattleEngine.getExpReward(state) * 1.5);
       console.log(`训练家战胜利！获得 ${exp} 经验值`);
       
-      const gainResult = PokemonManager.gainExp(state.playerPokemon, exp);
-      for (const msg of gainResult.messages) {
-        console.log(msg);
+      for (const p of aliveParty) {
+        const gainResult = PokemonManager.gainExp(p, Math.floor(exp / aliveParty.length));
+        for (const msg of gainResult.messages) {
+          console.log(msg);
+        }
       }
       
       const moneyReward = Math.floor(Math.random() * 300) + 100;
@@ -847,7 +960,23 @@ class Game {
       }
     }
     console.log('');
-    await this.input.waitForKey();
+    console.log('[1] 交换位置    [0] 返回');
+    const partyChoice = await this.input.getMenuChoice(1);
+    
+    if (partyChoice === 1 && this.player.party.length >= 2) {
+      console.log('选择第一只宝可梦(编号):');
+      const first = await this.input.getMenuChoice(this.player.party.length);
+      if (first === 0) return;
+      console.log('选择第二只宝可梦(编号):');
+      const second = await this.input.getMenuChoice(this.player.party.length);
+      if (second === 0 || second === first) return;
+      
+      const temp = this.player.party[first - 1];
+      this.player.party[first - 1] = this.player.party[second - 1];
+      this.player.party[second - 1] = temp;
+      console.log('交换成功！');
+      await this.input.waitForKey();
+    }
   }
 
   private async showInventory(): Promise<void> {

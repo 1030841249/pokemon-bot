@@ -43,12 +43,18 @@ export interface Evolution {
   itemName?: string;
 }
 
+export interface LevelMove {
+  level: number;
+  moveId: number;
+}
+
 export interface PokemonBase {
   id: number;
   name: string;
   types: PokemonType[];
   baseStats: Stats;
   learnset: number[];
+  levelMoves?: LevelMove[];
   evolutions?: Evolution[];
   catchRate: number;
   expYield: number;
@@ -134,25 +140,17 @@ export interface BattleState {
   type: 'wild' | 'trainer';
   playerPokemon: PokemonInstance;
   enemyPokemon: PokemonInstance;
-  playerActions: BattleAction[];
-  enemyActions: BattleAction[];
+  playerParty?: PokemonInstance[];
   turn: number;
-  log: BattleLogEntry[];
   isOver: boolean;
-  winner?: 'player' | 'enemy';
+  winner: 'player' | 'enemy' | null;
 }
 
 export interface BattleAction {
-  type: 'attack' | 'item' | 'switch' | 'run' | 'wait';
+  type: 'attack' | 'item' | 'run' | 'wait' | 'switch';
   moveId?: number;
   itemId?: number;
   pokemonIndex?: number;
-}
-
-export interface BattleLogEntry {
-  turn: number;
-  message: string;
-  type: 'info' | 'damage' | 'heal' | 'status' | 'critical' | 'miss';
 }
 
 export interface TypeChart {

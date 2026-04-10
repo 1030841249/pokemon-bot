@@ -116,17 +116,61 @@ class PokemonManager {
     }
     static getLearnedMoves(base, level) {
         const moves = [];
-        const moveIds = base.learnset.filter((_, index) => index < 4);
-        for (const moveId of moveIds) {
-            const move = moves_json_1.default.find(m => m.id === moveId);
-            if (move) {
-                moves.push({
-                    moveId,
-                    currentPp: move.pp
-                });
+        if (base.levelMoves && base.levelMoves.length > 0) {
+            const available = base.levelMoves
+                .filter((lm) => lm.level <= level)
+                .sort((a, b) => b.level - a.level);
+            for (const lm of available) {
+                if (moves.length >= 4)
+                    break;
+                if (moves.some(m => m.moveId === lm.moveId))
+                    continue;
+                const move = moves_json_1.default.find(m => m.id === lm.moveId);
+                if (move) {
+                    moves.push({ moveId: lm.moveId, currentPp: move.pp });
+                }
+            }
+        }
+        if (moves.length === 0) {
+            const moveIds = base.learnset.filter((_, index) => index < 4);
+            for (const moveId of moveIds) {
+                const move = moves_json_1.default.find(m => m.id === moveId);
+                if (move) {
+                    moves.push({ moveId, currentPp: move.pp });
+                }
             }
         }
         return moves;
+    }
+    static getNewMovesForLevel(baseId, level) {
+        const base = this.getPokemonBase(baseId);
+        if (!base || !base.levelMoves)
+            return [];
+        return base.levelMoves
+            .filter((lm) => lm.level === level)
+            .map((lm) => lm.moveId);
+    }
+    static tryLearnMove(pokemon, moveId) {
+        const move = moves_json_1.default.find(m => m.id === moveId);
+        if (!move)
+            return { learned: false, replaced: false, message: '' };
+        const name = this.getPokemonName(pokemon);
+        if (pokemon.moves.some(m => m.moveId === moveId)) {
+            return { learned: false, replaced: false, message: '' };
+        }
+        if (pokemon.moves.length < 4) {
+            pokemon.moves.push({ moveId, currentPp: move.pp });
+            return { learned: true, replaced: false, message: `${name} 学会了 ${move.name}！` };
+        }
+        const forgotten = pokemon.moves[0];
+        const forgottenMove = moves_json_1.default.find(m => m.id === forgotten.moveId);
+        pokemon.moves.shift();
+        pokemon.moves.push({ moveId, currentPp: move.pp });
+        return {
+            learned: true,
+            replaced: true,
+            message: `${name} 学会了 ${move.name}！忘记了 ${forgottenMove?.name || '旧技能'}`
+        };
     }
     static getExpForLevel(level) {
         return Math.round((level * level * level) * 1.2);
@@ -162,6 +206,13 @@ class PokemonManager {
                     pokemon.currentHp = pokemon.stats.hp - Math.min(hpDiff, 0);
                     result.leveledUp = true;
                     result.messages.push(`★ ${this.getPokemonName(pokemon)} 升到了 Lv.${pokemon.level}！`);
+                    const newMoveIds = this.getNewMovesForLevel(pokemon.baseId, pokemon.level);
+                    for (const moveId of newMoveIds) {
+                        const learnResult = this.tryLearnMove(pokemon, moveId);
+                        if (learnResult.learned) {
+                            result.messages.push(`  ${learnResult.message}`);
+                        }
+                    }
                     const displayStats = this.applyNatureToDisplay(pokemon.stats, pokemon.nature);
                     result.messages.push(`  HP:${displayStats.hp} 攻击:${displayStats.attack} 防御:${displayStats.defense}`);
                     const evoResult = this.checkEvolution(pokemon);
@@ -284,10 +335,10 @@ class PokemonManager {
         if (availablePokemon.length === 0)
             return null;
         const randomPokemon = availablePokemon[Math.floor(Math.random() * availablePokemon.length)];
-        const levelVariance = Math.max(3, minTier * 2);
-        const minLevel = Math.max(1, minTier * 2 - levelVariance);
-        const maxLevel = minTier * 2 + levelVariance + 5;
-        const level = minLevel + Math.floor(Math.random() * (maxLevel - minLevel));
+        const tier = randomPokemon.tier || minTier;
+        const minLevel = Math.max(2, Math.floor(tier * tier * 0.8) + 1);
+        const maxLevel = Math.floor(tier * tier * 1.5) + 3;
+        const level = minLevel + Math.floor(Math.random() * (maxLevel - minLevel + 1));
         return this.createPokemon(randomPokemon.id, level);
     }
     static isLegendary(id) {

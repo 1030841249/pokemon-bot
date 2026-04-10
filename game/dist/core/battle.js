@@ -8,16 +8,15 @@ const pokemon_1 = require("./pokemon");
 const moves_json_1 = __importDefault(require("../data/moves.json"));
 const typeChart_json_1 = __importDefault(require("../data/typeChart.json"));
 class BattleEngine {
-    static createBattle(playerPokemon, enemyPokemon, type) {
+    static createBattle(playerPokemon, enemyPokemon, type, playerParty) {
         return {
             type,
             playerPokemon: { ...playerPokemon },
             enemyPokemon: { ...enemyPokemon },
-            playerActions: [],
-            enemyActions: [],
+            playerParty: playerParty,
             turn: 0,
-            log: [],
-            isOver: false
+            isOver: false,
+            winner: null
         };
     }
     static executeTurn(state, playerAction, enemyAction) {
@@ -33,8 +32,8 @@ class BattleEngine {
         if (this.checkBattleEnd(state)) {
             return { messages: turnMessages, isOver: state.isOver };
         }
-        const playerSpeed = state.playerPokemon.stats.speed;
-        const enemySpeed = state.enemyPokemon.stats.speed;
+        const playerSpeed = this.getEffectiveSpeed(state.playerPokemon);
+        const enemySpeed = this.getEffectiveSpeed(state.enemyPokemon);
         const playerCanAct = this.canPokemonAct(state.playerPokemon);
         const enemyCanAct = this.canPokemonAct(state.enemyPokemon);
         const playerFirst = playerSpeed > enemySpeed ||
@@ -110,12 +109,34 @@ class BattleEngine {
         }
         return true;
     }
-    static executeAction(state, attacker, defender, action, _attackerRole) {
+    static getEffectiveSpeed(pokemon) {
+        const naturedStats = pokemon_1.PokemonManager.applyNatureToDisplay(pokemon.stats, pokemon.nature);
+        let speed = naturedStats.speed;
+        if (pokemon.statusEffects.includes('paralysis')) {
+            speed = Math.floor(speed * 0.25);
+        }
+        return speed;
+    }
+    static applyAbilityOnEntry(attacker, defender) {
+        const messages = [];
+        if (attacker.ability === '威吓') {
+            const defStats = pokemon_1.PokemonManager.applyNatureToDisplay(defender.stats, defender.nature);
+            defender.stats.attack = Math.max(1, Math.floor(defStats.attack * 0.67));
+            const defName = pokemon_1.PokemonManager.getPokemonName(defender);
+            messages.push(`${pokemon_1.PokemonManager.getPokemonName(attacker)}的威吓！${defName}的攻击下降了！`);
+        }
+        return messages;
+    }
+    static executeAction(state, attacker, defender, action, attackerRole) {
         const messages = [];
         switch (action.type) {
             case 'attack':
                 const attackMsgs = this.executeAttack(state, attacker, defender, action.moveId);
                 messages.push(...attackMsgs);
+                break;
+            case 'switch':
+                const switchMsgs = this.executeSwitch(state, action.pokemonIndex, attackerRole);
+                messages.push(...switchMsgs);
                 break;
             case 'run':
                 const runMsg = this.executeRun(state);
@@ -124,6 +145,22 @@ class BattleEngine {
             case 'wait':
                 messages.push(`${pokemon_1.PokemonManager.getPokemonName(attacker)}在等待...`);
                 break;
+        }
+        return messages;
+    }
+    static executeSwitch(state, pokemonIndex, role) {
+        const messages = [];
+        const oldName = pokemon_1.PokemonManager.getPokemonName(state.playerPokemon);
+        if (role === 'player' && state.playerParty) {
+            const newPokemon = state.playerParty[pokemonIndex];
+            if (newPokemon && !pokemon_1.PokemonManager.isFainted(newPokemon)) {
+                state.playerPokemon = newPokemon;
+                const newName = pokemon_1.PokemonManager.getPokemonName(newPokemon);
+                messages.push(`${oldName}，回来！`);
+                messages.push(`去吧！${newName}！`);
+                const abilityMsgs = this.applyAbilityOnEntry(newPokemon, state.enemyPokemon);
+                messages.push(...abilityMsgs);
+            }
         }
         return messages;
     }
@@ -141,6 +178,17 @@ class BattleEngine {
         }
         learnedMove.currentPp--;
         const attackerName = pokemon_1.PokemonManager.getPokemonName(attacker);
+        const defenderName = pokemon_1.PokemonManager.getPokemonName(defender);
+        if (defender.ability === '引火' && move.type === '火') {
+            messages.push(`${attackerName}使用了${move.name}！`);
+            messages.push(`${defenderName}的引火特性吸收了火焰攻击！`);
+            return messages;
+        }
+        if (defender.ability === '漂浮' && move.type === '地面') {
+            messages.push(`${attackerName}使用了${move.name}！`);
+            messages.push(`${defenderName}的漂浮特性使其免疫地面系攻击！`);
+            return messages;
+        }
         if (Math.random() * 100 > move.accuracy) {
             messages.push(`${attackerName}使用了${move.name}！没打中...`);
             return messages;
@@ -167,22 +215,58 @@ class BattleEngine {
         if (isCritical)
             msg += ' [要害一击]';
         messages.push(msg);
+        if (defender.statusEffects.includes('freeze') && move.type === '火') {
+            defender.statusEffects = defender.statusEffects.filter(s => s !== 'freeze');
+            messages.push(`${defenderName}被火焰解冻了！`);
+        }
+        if (defender.currentHp > 0) {
+            const statusEffect = move.statusEffect;
+            const statusChance = move.statusChance;
+            if (statusEffect && statusChance && Math.random() < statusChance) {
+                const addResult = pokemon_1.PokemonManager.addStatusEffect(defender, statusEffect);
+                if (addResult) {
+                    const statusNames = {
+                        poison: '中毒', burn: '烧伤', freeze: '冰冻',
+                        paralysis: '麻痹', sleep: '睡眠'
+                    };
+                    messages.push(`${defenderName}被${statusNames[statusEffect] || statusEffect}了！`);
+                }
+            }
+            if (defender.ability === '静电' && move.category === 'physical' && Math.random() < 0.3) {
+                const addResult = pokemon_1.PokemonManager.addStatusEffect(attacker, 'paralysis');
+                if (addResult) {
+                    messages.push(`${defenderName}的静电特性使${attackerName}麻痹了！`);
+                }
+            }
+        }
         return messages;
     }
     static calculateDamage(attacker, defender, move) {
         const level = attacker.level;
         const power = move.power;
-        const attack = move.category === 'physical'
-            ? attacker.stats.attack
-            : attacker.stats.spAttack;
-        const defense = move.category === 'physical'
-            ? defender.stats.defense
-            : defender.stats.spDefense;
+        const atkStats = pokemon_1.PokemonManager.applyNatureToDisplay(attacker.stats, attacker.nature);
+        const defStats = pokemon_1.PokemonManager.applyNatureToDisplay(defender.stats, defender.nature);
+        let attack = move.category === 'physical'
+            ? atkStats.attack
+            : atkStats.spAttack;
+        let defense = move.category === 'physical'
+            ? defStats.defense
+            : defStats.spDefense;
+        if (attacker.statusEffects.includes('burn') && move.category === 'physical') {
+            attack = Math.floor(attack * 0.5);
+        }
         const baseDamage = ((2 * level / 5 + 2) * power * attack / defense / 50) + 2;
         const effectiveness = this.getTypeEffectiveness(move.type, defender);
         const stab = this.getStabBonus(attacker, move.type);
         const random = 0.85 + Math.random() * 0.15;
-        return Math.floor(baseDamage * effectiveness * stab * random);
+        let finalDamage = Math.floor(baseDamage * effectiveness * stab * random);
+        if (attacker.ability === '猛火' || attacker.ability === '激流' || attacker.ability === '茂盛') {
+            const attackerBase = pokemon_1.PokemonManager.getPokemonBase(attacker.baseId);
+            if (attackerBase && attackerBase.types.includes(move.type) && attacker.currentHp < attacker.stats.hp * 0.33) {
+                finalDamage = Math.floor(finalDamage * 1.5);
+            }
+        }
+        return finalDamage;
     }
     static getTypeEffectiveness(attackType, defender) {
         const defenderBase = pokemon_1.PokemonManager.getPokemonBase(defender.baseId);
@@ -205,13 +289,21 @@ class BattleEngine {
     }
     static executeRun(state) {
         if (state.type === 'wild') {
-            if (Math.random() < 0.5) {
+            const playerSpeed = this.getEffectiveSpeed(state.playerPokemon);
+            const enemySpeed = this.getEffectiveSpeed(state.enemyPokemon);
+            const escapeOdds = Math.floor((playerSpeed * 128 / enemySpeed + 30 * state.turn) % 256);
+            if (Math.random() * 256 < escapeOdds) {
                 state.isOver = true;
                 return '成功逃跑了！';
             }
             return '逃跑失败！';
         }
         return '训练家战斗中无法逃跑！';
+    }
+    static hasAlivePartyMember(state) {
+        if (!state.playerParty)
+            return false;
+        return state.playerParty.some(p => !pokemon_1.PokemonManager.isFainted(p));
     }
     static checkBattleEnd(state) {
         if (state.enemyPokemon.currentHp <= 0) {
@@ -220,6 +312,9 @@ class BattleEngine {
             return true;
         }
         if (state.playerPokemon.currentHp <= 0) {
+            if (this.hasAlivePartyMember(state)) {
+                return false;
+            }
             state.isOver = true;
             state.winner = 'enemy';
             return true;
